@@ -1,5 +1,7 @@
 def is_valid_number(num: str) -> bool:
-    """
+    
+
+"""
     Returns True if and only if num is represents a valid number.
     See the corresponding .pdf for a definition of what a valid number
     would be.
@@ -14,9 +16,8 @@ def is_valid_number(num: str) -> bool:
     False
     >>> is_valid_number("abc")
     False
-    """
-    #TODO
-    return
+"""
+
 
 
 def is_valid_term(term: str) -> bool:
