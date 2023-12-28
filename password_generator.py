@@ -6,6 +6,7 @@ def password_generator():
     letters = int(input("How many letters?: "))
     nums = int(input("How many numbers?: "))
     specials = int(input("How many special characters?: "))
+    special_characters = ["!","@","#","$","%","^","&","*"]
     password = ""
 
     if letters + nums + specials != length:
@@ -19,7 +20,7 @@ def password_generator():
         password += random.choice(string.digits)
 
     for i in range(specials): 
-        password += random.choice(string.punctuation)
+        password += random.choice(special_characters)
     return ''.join(random.sample(password,len(password)))
 
 print(password_generator())
