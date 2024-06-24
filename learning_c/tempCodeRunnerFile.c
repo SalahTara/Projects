@@ -1,0 +1,1 @@
+yString + lastCharacter - 1
