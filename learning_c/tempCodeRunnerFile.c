@@ -1,1 +1,0 @@
-yString + lastCharacter - 1
