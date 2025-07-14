@@ -17,6 +17,7 @@
   flex-direction: column;
   align-items: center;
   padding-top: 60px;
+  max-height: 900px;
 }
 .main .icon {
   width: 34px;
@@ -62,3 +63,29 @@ img {
 	scale: 3.75;
 	padding-bottom: 10px;
 }
+
+p {
+  white-space: pre-wrap;
+  font-family: "ColfaxAI", Helvetica, sans-serif;
+  font-size: 20px;
+  border: 2px solid grey;
+  width: 450px;
+  border-left: 12px solid green;
+  border-radius: 5px;
+  padding: 14px;
+  width: 850px;
+  margin: 10px auto;
+}
+
+/* .queryWrapper {
+  width: 100%;
+}
+
+.queryWrapper {
+  border: 2px solid grey;
+  font-size: 16px;
+  color: blue;
+  padding: 0.75rem;
+  width: fit-content;
+  display: block  ;
+} */
