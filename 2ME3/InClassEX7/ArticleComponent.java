@@ -1,3 +1,0 @@
-interface ArticleComponent {
-    void display();
-}
