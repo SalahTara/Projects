@@ -13,7 +13,7 @@ function Home() {
 
   useEffect(() => {
     const checkAuth = async () => {
-      if (!authState.status) {
+      if (!localStorage.getItem("accessToken")) {
         navigate("/login");
       } else {
         try {

@@ -10,7 +10,7 @@ function createpost() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (!authState.status) {
+    if (!localStorage.getItem("accessToken")) {
       navigate("/login");
     }
   }, []);
