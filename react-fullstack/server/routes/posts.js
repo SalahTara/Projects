@@ -1,3 +1,4 @@
+
 const express = require("express");
 const router = express.Router();
 const { Posts, Likes } = require("../models");
@@ -20,6 +21,18 @@ router.post("/", validateToken, async (req, res) => {
   post.username = req.user.username
   await Posts.create(post);
   res.json(post);
+});
+
+router.delete("/byId/:id", validateToken, async (req, res) => {
+  const postId = req.params.id;
+
+  await Posts.destroy({
+    where: {
+      id: postId,
+    },
+  });
+
+  res.json("POST DELETED SUCCESSFULLY");
 });
 
 module.exports = router;
