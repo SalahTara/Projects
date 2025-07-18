@@ -20,8 +20,6 @@ function Post() {
     axios.get(`http://localhost:3001/comments/${id}`).then((response) => {
       setComments(response.data);
     });
-
-    axios.get(`http:localhost:3001`);
   }, []);
 
   const addComment = () => {
@@ -52,7 +50,6 @@ function Post() {
         }
       });
   };
-
   const deleteComment = (id) => {
     axios
       .delete(`http://localhost:3001/comments/${id}`, {
@@ -69,7 +66,7 @@ function Post() {
 
   const deletePost = (id) => {
     axios
-      .delete(`http://localhost:3001/posts/byId/${id}`, {
+      .delete(`http://localhost:3001/posts/${id}`, {
         headers: { accessToken: localStorage.getItem("accessToken") },
       })
       .then(() => {
@@ -77,6 +74,7 @@ function Post() {
       });
     navigate("/");
   };
+
   return (
     <div className="postPage">
       <div className="leftSide">
