@@ -12,22 +12,24 @@ function Home() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    if (!authState.status) {
-      navigate("/login");
-    } else {
-      axios
-        .get("http://localhost:3001/posts", {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        })
-        .then((response) => {
+    const checkAuth = async () => {
+      if (!authState.status) {
+        navigate("/login");
+      } else {
+        try {
+          const response = await axios.get("http://localhost:3001/posts", {
+            headers: { accessToken: localStorage.getItem("accessToken") },
+          });
+
           setListOfPosts(response.data.listOfPosts);
-          setLikedPosts(
-            response.data.likedPosts.map((like) => {
-              return like.PostId;
-            })
-          );
-        });
-    }
+          setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
+        } catch (error) {
+          console.error("Failed to fetch posts", error);
+        }
+      }
+    };
+
+    checkAuth();
   }, []);
 
   const likeAPost = (postId) => {
