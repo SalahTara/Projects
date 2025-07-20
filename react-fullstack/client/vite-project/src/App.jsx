@@ -16,6 +16,7 @@ import { AuthContext } from "./helpers/AuthContext";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import PageNotFound from "./pages/PageNotFound";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -86,6 +87,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
             <Route path="/profile/:id" element={<ProfilePage />} />
+            <Route path="/changepassword" element={<ChangePassword />} />
             <Route path="*" exact element={<PageNotFound />} />
           </Routes>
         </Router>

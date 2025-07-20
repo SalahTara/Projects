@@ -1,14 +1,16 @@
 import React, { use } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useContext } from "react";
 import { useState } from "react";
 import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
+import { AuthContext } from "../helpers/AuthContext";
 
 function ProfilePage() {
   let { id } = useParams();
   const [username, setUsername] = useState("");
   const [listOfPosts, setListOfPosts] = useState([]);
+  const { authState } = useContext(AuthContext);
 
   useEffect(() => {
     axios.get(`http://localhost:3001/auth/basicinfo/${id}`).then((response) => {
@@ -23,6 +25,7 @@ function ProfilePage() {
     <div className="profilePageContainer">
       <div className="basicInfo">
         <h1>Username: {username}</h1>
+        {authState.username === username && <button>Reset Password</button>}
       </div>
       <div className="listOfPosts">
         {listOfPosts.map((value, key) => {
