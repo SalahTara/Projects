@@ -1,4 +1,5 @@
 import "./App.css";
+import ProfilePage from "./pages/ProfilePage";
 import {
   BrowserRouter as Router,
   Route,
@@ -84,6 +85,7 @@ function App() {
             <Route path="post/:id" element={<Post />} />
             <Route path="/login" element={<Login />} />
             <Route path="/registration" element={<Registration />} />
+            <Route path="/profile/:id" element={<ProfilePage />} />
             <Route path="*" exact element={<PageNotFound />} />
           </Routes>
         </Router>

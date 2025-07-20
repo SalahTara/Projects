@@ -8,6 +8,7 @@ function Post() {
   let { id } = useParams();
   const [postObject, setPostObject] = useState({});
   const [comments, setComments] = useState([]);
+  const [listOfPosts, setListOfPosts] = useState([]);
   const [newComment, setNewComment] = useState("");
   const { authState } = useContext(AuthContext);
   let navigate = useNavigate();
@@ -19,6 +20,10 @@ function Post() {
 
     axios.get(`http://localhost:3001/comments/${id}`).then((response) => {
       setComments(response.data);
+    });
+
+    axios.get(`http://localhost:3001/posts/${id}`).then((response) => {
+      setListOfPosts(response.data);
     });
   }, []);
 
@@ -71,6 +76,11 @@ function Post() {
       })
       .then(() => {
         setPostObject({});
+        setListOfPosts(
+          listOfPosts.filter((val) => {
+            return val.id != id;
+          })
+        );
       });
     navigate("/");
   };
