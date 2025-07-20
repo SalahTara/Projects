@@ -30,6 +30,18 @@ router.post("/", validateToken, async (req, res) => {
   res.json(post);
 });
 
+router.put("/title", validateToken, async (req, res) => {
+  const {newTitle, id} = req.body;
+  await Posts.update({title: newTitle}, {where: {id: id}})
+  res.json(newTitle);
+});
+
+router.put("/body", validateToken, async (req, res) => {
+  const {newBody, id} = req.body;
+  await Posts.update({postText: newBody}, {where: {id: id}})
+  res.json(newBody);
+});
+
 router.delete("/:postId", validateToken, async (req, res) => {
   const postId = req.params.postId;
 
@@ -41,5 +53,6 @@ router.delete("/:postId", validateToken, async (req, res) => {
 
   res.json("POST DELETED SUCCESSFULLY");
 });
+
 
 module.exports = router;
