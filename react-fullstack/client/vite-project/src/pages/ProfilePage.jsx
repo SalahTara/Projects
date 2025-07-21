@@ -14,12 +14,20 @@ function ProfilePage() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/auth/basicinfo/${id}`).then((response) => {
-      setUsername(response.data.username);
-    });
-    axios.get(`http://localhost:3001/posts/byUserId/${id}`).then((response) => {
-      setListOfPosts(response.data);
-    });
+    axios
+      .get(
+        `https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/auth/basicinfo/${id}`
+      )
+      .then((response) => {
+        setUsername(response.data.username);
+      });
+    axios
+      .get(
+        `https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/posts/byUserId/${id}`
+      )
+      .then((response) => {
+        setListOfPosts(response.data);
+      });
   }, []);
 
   return (

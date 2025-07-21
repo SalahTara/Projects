@@ -33,9 +33,12 @@ function App() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/auth/auth", {
-        headers: { accessToken: localStorage.getItem("accessToken") },
-      })
+      .get(
+        `https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/auth/auth`,
+        {
+          headers: { accessToken: localStorage.getItem("accessToken") },
+        }
+      )
       .then((response) => {
         if (response.data.error) {
           setAuthState({ ...authState, status: false });

@@ -4,7 +4,14 @@ const cors = require("cors");
 require("dotenv").config();
 
 app.use(express.json());
-app.use(cors());
+
+app.use(cors({
+  origin: 'https://effervescent-puppy-32554e.netlify.app',
+  credentials: true, // if you use cookies/auth
+}));
+app.use(express.json());
+
+
 const db = require('./models');
 
 // Routers
