@@ -14,15 +14,15 @@ function Post() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/posts/byId/${id}`).then((response) => {
+    axios.get(`https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/posts/byId/${id}`).then((response) => {
       setPostObject(response.data);
     });
 
-    axios.get(`http://localhost:3001/comments/${id}`).then((response) => {
+    axios.get(`https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/comments/${id}`).then((response) => {
       setComments(response.data);
     });
 
-    axios.get(`http://localhost:3001/posts/${id}`).then((response) => {
+    axios.get(`https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/posts/${id}`).then((response) => {
       setListOfPosts(response.data);
     });
   }, []);

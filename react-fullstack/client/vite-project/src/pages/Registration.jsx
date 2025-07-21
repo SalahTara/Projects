@@ -17,10 +17,15 @@ function Registration() {
   });
 
   const onSubmit = (data) => {
-    axios.post("http://localhost:3001/auth", data).then(() => {
-      console.log(data);
-      navigate("/");
-    });
+    axios
+      .post(
+        "https://full-stack-api-posts-app-8d7221af6ca5.herokuapp.com/auth",
+        data
+      )
+      .then(() => {
+        console.log(data);
+        navigate("/");
+      });
   };
 
   return (
@@ -48,7 +53,8 @@ function Registration() {
             autoComplete="off"
             id="inputPassword"
             name="password"
-            placeholder="Your Password..."
+            p
+            laceholder="Your Password..."
             type="password"
           />
           <button type="submit">Register</button>
