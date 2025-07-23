@@ -1,31 +1,32 @@
 import express from "express";
-import cors from 'cors';
-import generate from "./generate.js";
+import cors from "cors";
+
 const app = express();
+app.use(express.json()); 
 
-app.use(express.json())
-app.use(cors())
+app.use(cors(
+  { origin: "*" }
+));
 
-const port = process.env.PORT || 3005
+const port = process.env.PORT || 3002;
 
-app.get("/", (req,res) => {
-	res.send("Hello world from our API")
-})
+import generate from "./generate.js";
 
-app.post("/generate", async (req,res) => {
-	const recipeDescription = req.body.recipeDescription
-	// console.log("received descritption", recipeDescription)
-	// res.json( { response: `You sent this ${recipeDescription}`})
-	try {
-		const recipe = await generate(recipeDescription)
-		res.json({response: recipe})
-	} catch (error) {
-		console.error(error)
-		res.status(500).send("Internal Server Error")
-	}
-})
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 app.listen(port, () => {
-	console.log(`Listening on port ${port}`)
-})
+  console.log(`Listening on port ${port}...`);
+});
 
+app.post("/generate", async (req, res) => {
+  const { queryDescription } = req.body
+  try {
+    const sqlQuery = await generate(queryDescription);
+    res.json({ sqlQuery });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Internal Server Error");
+  }
+});
