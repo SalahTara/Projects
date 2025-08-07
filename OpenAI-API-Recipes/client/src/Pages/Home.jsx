@@ -73,7 +73,7 @@ export default function Home() {
       {/* MAIN CONTENT CONTAINER - Now uses flex-col for vertical layout */}
       <div className="flex flex-1">
         {/* Left Container - Query History */}
-        <div className="h-[calc(100vh-4rem)] w-1/4 p-6 bg-white border-r border-gray-200 overflow-y-auto">
+        <div className="h-[calc(100vh-4rem)] w-1/4 p-6 bg-white border-r border-gray-200 overflow-y-auto ">
           {/* Changed h-screen to h-[calc(100vh-4rem)] to account for navbar height */}
           <h2 className="text-xl font-semibold mb-4 text-gray-800">
             Query History
@@ -82,7 +82,7 @@ export default function Home() {
             {listOfQueries.map((query, key) => (
               <div
                 key={key}
-                className="p-4 bg-gray-50 rounded-lg shadow-sm border border-gray-100"
+                className="p-4 bg-gray-50 rounded-lg shadow-sm border border-gray-100 transition-transform duration-300 ease-in-out hover:scale-110 hover:shadow-lg"
               >
                 <div
                   htmlFor="prompt-delete-container "
@@ -92,6 +92,7 @@ export default function Home() {
                     {query.prompt}
                   </p>
                   <button
+                    className="hover:text-red-400"
                     onClick={() => {
                       deleteQueries(query.id);
                     }}
@@ -151,22 +152,6 @@ export default function Home() {
               </pre>
             </div>
           )}
-        </div>
-
-        {/* Right Container - Now with sample content */}
-        <div className="w-1/4 p-6 bg-white border-l border-gray-200">
-          <h2 className="text-lg font-semibold mb-4 text-gray-800">Tips</h2>
-          <ul className="space-y-3 text-sm text-gray-600">
-            <li className="p-2 bg-gray-50 rounded">
-              • Use specific table names
-            </li>
-            <li className="p-2 bg-gray-50 rounded">
-              • Mention required columns
-            </li>
-            <li className="p-2 bg-gray-50 rounded">
-              • Specify filter conditions
-            </li>
-          </ul>
         </div>
       </div>
     </main>
