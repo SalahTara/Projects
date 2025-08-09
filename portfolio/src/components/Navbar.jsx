@@ -28,7 +28,7 @@ function Navbar() {
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        Portfolio
+        My Portfolio
       </motion.div>
       <motion.ul
         className="nav-links"
