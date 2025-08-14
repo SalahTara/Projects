@@ -18,12 +18,9 @@ function Home() {
         navigate("/login");
       } else {
         try {
-          const response = await axios.get(
-            "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts",
-            {
-              headers: { accessToken: localStorage.getItem("accessToken") },
-            }
-          );
+          const response = await axios.get("http://localhost:3005/posts", {
+            headers: { accessToken: localStorage.getItem("accessToken") },
+          });
 
           setListOfPosts(response.data.listOfPosts);
           setLikedPosts(response.data.likedPosts.map((like) => like.PostId));
@@ -39,7 +36,7 @@ function Home() {
   const likeAPost = (postId) => {
     axios
       .post(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/likes",
+        "http://localhost:3005/likes",
         { PostId: postId },
         { headers: { accessToken: localStorage.getItem("accessToken") } }
       )
@@ -75,21 +72,23 @@ function Home() {
     <div className="App">
       {listOfPosts.map((value, key) => {
         return (
-          <div className="post">
-            <div className="title">{value.title}</div>
+          <div className="post" key={key}>
+            <div className="post-title">{value.title}</div>
             <div
-              className="body"
+              className="post-body"
               onClick={() => {
                 navigate(`/post/${value.id}`);
               }}
             >
               {value.postText}
             </div>
-            <div className="footer">
-              <div>
-                <Link to={`/profile/${value.UserId}`}>{value.username}</Link>
+            <div className="post-footer">
+              <div className="post-author">
+                <Link to={`/profile/${value.UserId}`} className="author-link">
+                  {value.username}
+                </Link>
               </div>
-              <div className="buttons">
+              <div className="post-buttons">
                 <ThumbUpAltIcon
                   onClick={() => {
                     likeAPost(value.id);
@@ -98,8 +97,7 @@ function Home() {
                     likedPosts.includes(value.id) ? "unlikeBttn" : "likeBttn"
                   }
                 />
-
-                <label>{value.Likes.length}</label>
+                <label className="like-count">{value.Likes.length}</label>
               </div>
             </div>
           </div>

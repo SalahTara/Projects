@@ -17,47 +17,52 @@ function Registration() {
   });
 
   const onSubmit = (data) => {
-    axios
-      .post(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/auth",
-        data
-      )
-      .then(() => {
-        console.log(data);
-        navigate("/");
-      });
+    axios.post("http://localhost:3005/auth", data).then(() => {
+      console.log(data);
+      navigate("/");
+    });
   };
 
   return (
-    <div className="registration-page">
+    <div className="registration-page container">
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        <Form className="formContainer">
-          <label>Username: </label>
-          <ErrorMessage name="username" component="span" />
+        <Form className="card grid formContainer">
+          <label className="title-lg">Username:</label>
+          <ErrorMessage
+            name="username"
+            component="span"
+            className="error-text"
+          />
           <Field
-            className="field"
+            className="input"
             autoComplete="off"
             id="inputUsername"
             name="username"
             placeholder="Your Username"
           />
 
-          <label>Password: </label>
-          <ErrorMessage name="password" component="span" />
+          <label className="title-lg">Password:</label>
+          <ErrorMessage
+            name="password"
+            component="span"
+            className="error-text"
+          />
           <Field
-            className="field"
+            className="input"
             autoComplete="off"
             id="inputPassword"
             name="password"
-            p
-            laceholder="Your Password..."
             type="password"
+            placeholder="Your Password..."
           />
-          <button type="submit">Register</button>
+
+          <button type="submit" className="btn btn-primary">
+            Register
+          </button>
         </Form>
       </Formik>
     </div>

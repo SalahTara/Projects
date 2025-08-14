@@ -33,12 +33,9 @@ function App() {
 
   useEffect(() => {
     axios
-      .get(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/auth/auth`,
-        {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        }
-      )
+      .get(`http://localhost:3005/auth/auth`, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
       .then((response) => {
         if (response.data.error) {
           setAuthState({ ...authState, status: false });
@@ -60,27 +57,39 @@ function App() {
       <AuthContext.Provider value={{ authState, setAuthState }}>
         <Router>
           <div className="navbar">
-            <div className="links">
+            <div className="links nav-links">
               {authState.status ? (
                 <>
-                  <Link to="/createpost">Create A Post</Link>
-                  <Link to="/">Home Page</Link>
+                  <Link to="/createpost" className="nav-link">
+                    Create A Post
+                  </Link>
+                  <Link to="/" className="nav-link">
+                    Home Page
+                  </Link>
                 </>
               ) : (
                 ""
               )}
               {!authState.status ? (
                 <>
-                  <Link to="/login">Login</Link>
-                  <Link to="/registration">Registration</Link>
+                  <Link to="/login" className="nav-link">
+                    Login
+                  </Link>
+                  <Link to="/registration" className="nav-link">
+                    Registration
+                  </Link>
                 </>
               ) : (
                 ""
               )}
             </div>
-            <div className="loggedInContainer">
-              <h1>{authState.username}</h1>
-              {authState.status && <button onClick={logout}>Log Out</button>}
+            <div className="loggedInContainer nav-auth">
+              <h1 className="nav-username">{authState.username}</h1>
+              {authState.status && (
+                <button className="logout-btn" onClick={logout}>
+                  Log Out
+                </button>
+              )}
             </div>
           </div>
           <Routes>

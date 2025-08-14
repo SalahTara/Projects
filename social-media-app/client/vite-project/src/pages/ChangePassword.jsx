@@ -7,7 +7,7 @@ function ChangePassword() {
   const changePassword = () => {
     axios
       .put(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/auth/changepassword",
+        "http://localhost:3005/auth/changepassword",
         {
           oldPassword: oldPassword,
           newPassword: newPassword,
@@ -21,23 +21,38 @@ function ChangePassword() {
       });
   };
   return (
-    <div>
-      <h1>Change Your Password</h1>
-      <input
-        type="text"
-        placeholder="Current Password..."
-        onChange={(e) => {
-          setOldPassword(e.target.value);
-        }}
-      />
-      <input
-        type="text"
-        placeholder="New Password..."
-        onChange={(e) => {
-          setNewPassword(e.target.value);
-        }}
-      />
-      <button onClick={changePassword}>Save Changes</button>
+    <div className="changePasswordPage container">
+      <h1 className="title-xl">Change Your Password</h1>
+
+      <div className="card grid">
+        <div className="cp-field">
+          <input
+            className="input"
+            type="password"
+            placeholder="Current Password..."
+            onChange={(e) => {
+              setOldPassword(e.target.value);
+            }}
+          />
+        </div>
+
+        <div className="cp-field">
+          <input
+            className="input"
+            type="password"
+            placeholder="New Password..."
+            onChange={(e) => {
+              setNewPassword(e.target.value);
+            }}
+          />
+        </div>
+
+        <div className="space">
+          <button className="btn btn-primary" onClick={changePassword}>
+            Save Changes
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

@@ -14,28 +14,25 @@ function ProfilePage() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/auth/basicinfo/${id}`
-      )
-      .then((response) => {
-        setUsername(response.data.username);
-      });
-    axios
-      .get(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts/byUserId/${id}`
-      )
-      .then((response) => {
-        setListOfPosts(response.data);
-      });
+    axios.get(`http://localhost:3005/auth/basicinfo/${id}`).then((response) => {
+      setUsername(response.data.username);
+    });
+    axios.get(`http://localhost:3005/posts/byUserId/${id}`).then((response) => {
+      setListOfPosts(response.data);
+    });
   }, []);
 
   return (
-    <div className="profilePageContainer">
-      <div className="basicInfo">
-        <h1>Username: {username}</h1>
+    <div
+      className="profilePageContainer container grid"
+      style={{ gap: "1.5rem" }}
+    >
+      {/* Basic Info */}
+      <div className="card space basicInfo">
+        <h1 className="title-lg">Username: {username}</h1>
         {authState.username === username && (
           <button
+            className="btn btn-primary"
             onClick={() => {
               navigate("/changepassword");
             }}
@@ -44,30 +41,34 @@ function ProfilePage() {
           </button>
         )}
       </div>
-      <div className="listOfPosts">
-        {listOfPosts.map((value, key) => {
-          return (
-            <div className="post">
-              <div className="title">{value.title}</div>
-              <div
-                className="body"
-                onClick={() => {
-                  navigate(`/post/${value.id}`);
-                }}
-              >
-                {value.postText}
-              </div>
-              <div className="footer">
-                <div className="username">{value.username}</div>
-                <div className="buttons">
-                  <ThumbUpAltIcon />
 
-                  <label>{value.Likes.length}</label>
-                </div>
+      {/* Posts */}
+      <div className="profile-posts grid">
+        {listOfPosts.map((value, key) => (
+          <div className="card grid" key={key} style={{ gap: ".6rem" }}>
+            <div className="title-lg">{value.title}</div>
+
+            <div
+              className="body-text"
+              onClick={() => {
+                navigate(`/post/${value.id}`);
+              }}
+              style={{ cursor: "pointer" }}
+            >
+              {value.postText}
+            </div>
+
+            <div className="space muted">
+              <span className="link">{value.username}</span>
+              <div className="row">
+                <ThumbUpAltIcon />
+                <label className="profile-like-count">
+                  {value.Likes.length}
+                </label>
               </div>
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -32,8 +32,8 @@ db.sequelize.sync().then(() => {
 	app.get("/", (req, res) => {
   		res.send("API is working ✅");
 	});
-	app.listen(process.env.PORT || 3001, () => {
-	console.log('Server is running... on port 3001')
+	app.listen(process.env.PORT || 3005, () => {
+	console.log('Server is running... on port 3005')
 	});
 })
 .catch((err) => {

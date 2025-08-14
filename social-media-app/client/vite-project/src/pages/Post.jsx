@@ -14,35 +14,23 @@ function Post() {
   let navigate = useNavigate();
 
   useEffect(() => {
-    axios
-      .get(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts/byId/${id}`
-      )
-      .then((response) => {
-        setPostObject(response.data);
-      });
+    axios.get(`http://localhost:3005/posts/byId/${id}`).then((response) => {
+      setPostObject(response.data);
+    });
 
-    axios
-      .get(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/comments/${id}`
-      )
-      .then((response) => {
-        setComments(response.data);
-      });
+    axios.get(`http://localhost:3005/comments/${id}`).then((response) => {
+      setComments(response.data);
+    });
 
-    axios
-      .get(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts/${id}`
-      )
-      .then((response) => {
-        setListOfPosts(response.data);
-      });
+    axios.get(`http://localhost:3005/posts/${id}`).then((response) => {
+      setListOfPosts(response.data);
+    });
   }, []);
 
   const addComment = () => {
     axios
       .post(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/comments",
+        "http://localhost:3005/comments",
         {
           commentBody: newComment,
           PostId: id,
@@ -69,12 +57,9 @@ function Post() {
   };
   const deleteComment = (id) => {
     axios
-      .delete(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/comments/${id}`,
-        {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        }
-      )
+      .delete(`http://localhost:3005/comments/${id}`, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
       .then(() => {
         setComments(
           comments.filter((val) => {
@@ -86,12 +71,9 @@ function Post() {
 
   const deletePost = (id) => {
     axios
-      .delete(
-        `https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts/${id}`,
-        {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        }
-      )
+      .delete(`http://localhost:3005/posts/${id}`, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
       .then(() => {
         setPostObject({});
         setListOfPosts(
@@ -109,7 +91,7 @@ function Post() {
     if (option === "title") {
       newTitle = prompt("Enter New Title: ");
       axios.put(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts/title",
+        "http://localhost:3005/posts/title",
         {
           newTitle: newTitle,
           id: id,
@@ -120,7 +102,7 @@ function Post() {
     } else {
       newBody = prompt("Enter New Text");
       axios.put(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts/body",
+        "http://localhost:3005/posts/body",
         {
           newBody: newBody,
           id: id,
@@ -132,11 +114,12 @@ function Post() {
   };
 
   return (
-    <div className="postPage">
+    <div className="postPage container grid-2">
+      {/* Left Side: Post */}
       <div className="leftSide">
-        <div className="post" id="individual">
+        <div className="card" id="individual">
           <div
-            className="title"
+            className="title-lg"
             onClick={() => {
               if (authState.username === postObject.username) {
                 editPost("title");
@@ -145,8 +128,9 @@ function Post() {
           >
             {postObject.title}
           </div>
+
           <div
-            className="body"
+            className="body-text"
             onClick={() => {
               if (authState.username === postObject.username) {
                 editPost("body");
@@ -155,23 +139,28 @@ function Post() {
           >
             {postObject.postText}
           </div>
-          <div className="footer">
-            {postObject.username}
+
+          <div className="space muted">
+            <span>{postObject.username}</span>
             {authState.username === postObject.username && (
               <DeleteIcon
+                style={{ cursor: "pointer" }}
                 onClick={() => {
                   deletePost(id);
                   navigate("/");
                 }}
-              ></DeleteIcon>
+              />
             )}
           </div>
         </div>
       </div>
-      <div className="rightSide">
-        <div className="addCommentContainer">
+
+      {/* Right Side: Comments */}
+      <div className="rightSide grid" style={{ gap: "1.25rem" }}>
+        <div className="card row addCommentContainer">
           <input
             type="text"
+            className="input"
             placeholder="Comment..."
             autoComplete="off"
             value={newComment}
@@ -179,26 +168,32 @@ function Post() {
               setNewComment(event.target.value);
             }}
           />
-          <button onClick={addComment}> Add Comment</button>
+          <button className="btn btn-primary" onClick={addComment}>
+            Add Comment
+          </button>
         </div>
-        <div className="listOfComments">
-          {comments.map((comment, key) => {
-            return (
-              <div key={key} className="comment">
-                {comment.commentBody}
-                <label> Username: {comment.username}</label>
-                {authState.username === comment.username && (
-                  <button
-                    onClick={() => {
-                      deleteComment(comment.id);
-                    }}
-                  >
-                    X
-                  </button>
-                )}
-              </div>
-            );
-          })}
+
+        <div className="listOfComments grid">
+          {comments.map((comment, key) => (
+            <div
+              key={key}
+              className="card comment grid"
+              style={{ gap: ".5rem" }}
+            >
+              <div className="body-text">{comment.commentBody}</div>
+              <label className="muted">Username: {comment.username}</label>
+              {authState.username === comment.username && (
+                <button
+                  className="btn btn-danger"
+                  onClick={() => {
+                    deleteComment(comment.id);
+                  }}
+                >
+                  X
+                </button>
+              )}
+            </div>
+          ))}
         </div>
       </div>
     </div>

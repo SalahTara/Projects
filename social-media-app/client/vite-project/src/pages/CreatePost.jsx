@@ -20,13 +20,9 @@ function createpost() {
   };
   const onSubmit = (data) => {
     axios
-      .post(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/posts",
-        data,
-        {
-          headers: { accessToken: localStorage.getItem("accessToken") },
-        }
-      )
+      .post("http://localhost:3005/posts", data, {
+        headers: { accessToken: localStorage.getItem("accessToken") },
+      })
       .then((response) => {
         navigate("/");
       });
@@ -38,33 +34,46 @@ function createpost() {
   });
 
   return (
-    <div className="createPostPage">
+    <div className="createPostPage container">
       <Formik
         initialValues={initialValues}
         onSubmit={onSubmit}
         validationSchema={validationSchema}
       >
-        <Form className="formContainer">
-          <label>Title: </label>
-          <ErrorMessage name="title-error" component="span" />
+        <Form className="card grid formContainer">
+          <label className="title-lg">Title:</label>
+          <ErrorMessage
+            name="title-error"
+            component="span"
+            className="error-text"
+          />
           <Field
-            className="field"
+            className="input"
             autoComplete="off"
             id="inputCreatePost"
             name="title"
             placeholder="(Ex. title...)"
           />
-          <label>Post: </label>
-          <ErrorMessage name="postText-error" component="span" />
+
+          <label className="title-lg">Post:</label>
+          <ErrorMessage
+            name="postText-error"
+            component="span"
+            className="error-text"
+          />
           <Field
-            className="field"
+            as="textarea"
+            rows="4"
+            className="textarea"
             autoComplete="off"
             id="inputCreatePost"
             name="postText"
-            placeholder="(Ex. Hi I'm Johm...)"
+            placeholder="(Ex. Hi I'm John...)"
           />
 
-          <button type="submit">Create Post</button>
+          <button type="submit" className="btn btn-primary">
+            Create Post
+          </button>
         </Form>
       </Formik>
     </div>

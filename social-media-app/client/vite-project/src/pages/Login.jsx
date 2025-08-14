@@ -12,52 +12,53 @@ function Login() {
 
   const login = () => {
     const data = { username: username, password: password };
-    axios
-      .post(
-        "https://full-stack-server-salaheddin-0e99fd015aab.herokuapp.com/auth/login",
-        data
-      )
-      .then((response) => {
-        if (response.data.error) {
-          alert(response.data.error);
-        } else {
-          localStorage.setItem("accessToken", response.data.token);
-          setAuthState({
-            username: response.data.username,
-            id: response.data.id,
-            status: true,
-          });
-          navigate("/");
-        }
-      });
+    axios.post("http://localhost:3005/auth/login", data).then((response) => {
+      if (response.data.error) {
+        alert(response.data.error);
+      } else {
+        localStorage.setItem("accessToken", response.data.token);
+        setAuthState({
+          username: response.data.username,
+          id: response.data.id,
+          status: true,
+        });
+        navigate("/");
+      }
+    });
   };
 
   return (
-    <div className="loginContainer">
-      <input
-        placeholder="Username"
-        type="text"
-        onChange={(e) => {
-          setUsername(e.target.value);
-        }}
-      />
-      <input
-        placeholder="Password"
-        type="password"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-      />
+    <div className="loginContainer container">
+      <div className="card grid">
+        <input
+          className="input"
+          placeholder="Username"
+          type="text"
+          onChange={(e) => {
+            setUsername(e.target.value);
+          }}
+        />
 
-      <button
-        onClick={login}
-        type="submit"
-        onSubmit={() => {
-          navigate("/");
-        }}
-      >
-        Login
-      </button>
+        <input
+          className="input"
+          placeholder="Password"
+          type="password"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+        />
+
+        <button
+          className="btn btn-primary"
+          onClick={login}
+          type="submit"
+          onSubmit={() => {
+            navigate("/");
+          }}
+        >
+          Login
+        </button>
+      </div>
     </div>
   );
 }
