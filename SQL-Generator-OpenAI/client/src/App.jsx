@@ -6,14 +6,6 @@ import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 
 export default function App() {
-  // const [userPrompt, setUserPrompt] = useState("");
-  // const [sqlQuery, setSqlQuery] = useState("");
-  // const [listOfQueries, setListOfQueries] = useState([]);
-
-  // useEffect(() => {
-
-  // }, []);
-
   return (
     <main className="flex flex-col min-h-screen bg-gray-50">
       {/* NAVBAR ADDITION - Full width above the content */}
