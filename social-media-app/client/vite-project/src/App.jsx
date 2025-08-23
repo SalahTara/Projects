@@ -1,12 +1,5 @@
 import "./App.css";
 import ProfilePage from "./pages/ProfilePage";
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-  Link,
-  useNavigate,
-} from "react-router-dom";
 import Home from "./pages/Home";
 import CreatePost from "./pages/CreatePost";
 import Post from "./pages/Post";
@@ -17,6 +10,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import PageNotFound from "./pages/PageNotFound";
 import ChangePassword from "./pages/ChangePassword";
+import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 
 function App() {
   const [loading, setLoading] = useState(true);

@@ -4,9 +4,9 @@ const { Posts, Likes } = require("../models");
 const { validateToken } = require("../middleware/AuthMiddleware");
 
 router.get("/", validateToken, async (req, res) => {
-  const listOfPosts = await Posts.findAll({include: [Likes] });
-  const likedPosts = await Likes.findAll({ where: { UserId: req.user.id }});
-  res.json({listOfPosts: listOfPosts, likedPosts: likedPosts});
+  const listOfPosts = await Posts.findAll({ include: [Likes] });
+  const likedPosts = await Likes.findAll({ where: { UserId: req.user.id } });
+  res.json({ listOfPosts: listOfPosts, likedPosts: likedPosts });
 });
 
 router.get("/byId/:id", async (req, res) => {
@@ -17,27 +17,30 @@ router.get("/byId/:id", async (req, res) => {
 
 router.get("/byUserId/:id", async (req, res) => {
   const id = req.params.id;
-  const listOfPosts = await Posts.findAll({where: {UserId: id}, include: [Likes]});
+  const listOfPosts = await Posts.findAll({
+    where: { UserId: id },
+    include: [Likes],
+  });
   res.json(listOfPosts);
 });
 
 router.post("/", validateToken, async (req, res) => {
   const post = req.body;
-  post.username = req.user.username
-  post.UserId = req.user.id
+  post.username = req.user.username;
+  post.UserId = req.user.id;
   await Posts.create(post);
   res.json(post);
 });
 
 router.put("/title", validateToken, async (req, res) => {
-  const {newTitle, id} = req.body;
-  await Posts.update({title: newTitle}, {where: {id: id}})
+  const { newTitle, id } = req.body;
+  await Posts.update({ title: newTitle }, { where: { id: id } });
   res.json(newTitle);
 });
 
 router.put("/body", validateToken, async (req, res) => {
-  const {newBody, id} = req.body;
-  await Posts.update({postText: newBody}, {where: {id: id}})
+  const { newBody, id } = req.body;
+  await Posts.update({ postText: newBody }, { where: { id: id } });
   res.json(newBody);
 });
 
@@ -52,6 +55,5 @@ router.delete("/:postId", validateToken, async (req, res) => {
 
   res.json("POST DELETED SUCCESSFULLY");
 });
-
 
 module.exports = router;
