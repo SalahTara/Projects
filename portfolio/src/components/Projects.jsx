@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
 
 const fadeInUp = {
@@ -16,6 +16,13 @@ const staggerContainer = {
 };
 
 function Projects() {
+  const rowRef = useRef(null);
+  const nudge = (dir) => {
+    const row = rowRef.current;
+    if (!row) return;
+    const step = row.clientWidth * 0.9; // scroll almost a full viewport
+    row.scrollBy({ left: dir * step, behavior: "smooth" });
+  };
   return (
     <motion.section
       id="projects"
@@ -37,7 +44,7 @@ function Projects() {
         className="project-grid"
         variants={staggerContainer}
         initial="initial"
-        whileInView="animate"
+        animate="animate"
         viewport={{ once: true }}
       >
         <motion.div
@@ -46,17 +53,20 @@ function Projects() {
           whileHover={{ y: -10, transition: { duration: 0.2 } }}
         >
           <motion.div
-            className="project-image"
-            style={{ backgroundImage: "url('/projects/ai-saas.png')" }}
             whileHover={{ scale: 1.05, transition: { duration: 0.2 } }}
           />
-          <h3> AI SaaS Platform</h3>
+          <img
+            className="project-image"
+            src="/images/SQL-WebApp.png"
+            alt="SQL Generator screenshot"
+          />
+          <h3> SQL Query Generator</h3>
           <p>
-            A modern SaaS platform built with Next.js and OpenAI integration,
-            featuring real-time AI-powered content generation and analytics.
+            An SQL query generator with React, Node.js, and TailwindCSS, using
+            OpenAI’s API to convert natural language into SQL queries.
           </p>
           <div className="project-tech">
-            <span>Next.js</span>
+            <span>Express.js</span>
             <span>OpenAI</span>
             <span>TailwindCSS</span>
           </div>
@@ -68,22 +78,24 @@ function Projects() {
           whileHover={{ y: -10, transition: { duration: 0.2 } }}
         >
           <motion.div
-            className="project-image"
-            style={{
-              backgroundImage: "url('/projects/social-media.png')",
-            }}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           />
-          <h3>Social Media Dashboard</h3>
+          <img
+            className="project-image"
+            src="/images/socialmedia.png"
+            alt="Social Media Web Application"
+          />
+          <h3>Social Media Application</h3>
           <p>
-            A comprehensive social media management dashboard with analytics,
-            scheduling, and engagement tracking features.
+            Full-stack social media app with React, Node.js, and MySQL
+            Workbench, implementing user authentication, posting, and
+            interactions with JavaScript, HTML, and CSS.
           </p>
           <div className="project-tech">
             <span>React</span>
             <span>Node.js</span>
-            <span>MongoDB</span>
+            <span>MySQL Workbench</span>
           </div>
         </motion.div>
 
@@ -93,22 +105,36 @@ function Projects() {
           whileHover={{ y: -10, transition: { duration: 0.2 } }}
         >
           <motion.div
-            className="project-image"
-            style={{
-              backgroundImage: "url('/projects/stopwatch.png')",
-            }}
             whileHover={{ scale: 1.05 }}
             transition={{ duration: 0.2 }}
           />
-          <h3>Productivity Timer</h3>
-          <p>
-            A sleek productivity timer application with customizable work
-            sessions, statistics tracking, and dark mode support.
-          </p>
+          <img className="project-image" src="" alt="In Progress..." />
+          <h3>In Progress...</h3>
+          <p>In Progress...</p>
           <div className="project-tech">
-            <span>React</span>
-            <span>TypeScript</span>
-            <span>TailwindCSS</span>
+            <span>In Progress...</span>
+            <span>In Progress...</span>
+            <span>In Progress...</span>
+          </div>
+        </motion.div>
+
+        {/* test */}
+        <motion.div
+          className="project-card"
+          variants={fadeInUp}
+          whileHover={{ y: -10, transition: { duration: 0.2 } }}
+        >
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            transition={{ duration: 0.2 }}
+          />
+          <img className="project-image" src="" alt="In Progress..." />
+          <h3>In Progress...</h3>
+          <p>In Progress...</p>
+          <div className="project-tech">
+            <span>In Progress...</span>
+            <span>In Progress...</span>
+            <span>In Progress...</span>
           </div>
         </motion.div>
       </motion.div>

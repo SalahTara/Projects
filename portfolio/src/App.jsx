@@ -13,7 +13,11 @@ function App() {
   useEffect(() => {
     setIsLoaded(true);
     emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+    window.onbeforeunload = () => {
+      window.scrollTo(0, 0);
+    };
   }, []);
+
   return (
     <div className={`app ${isLoaded ? "loaded" : ""}`}>
       <Navbar />
