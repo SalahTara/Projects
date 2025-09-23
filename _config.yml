@@ -2,7 +2,6 @@
 exclude:
   - "node_modules/"
   - "**/node_modules/"
-  - "voice-recorder-app/"
   - "mern-crash-course/"
   - "*.json"
   - "*.js"
@@ -11,3 +10,21 @@ exclude:
   - "yarn.lock"
   - "package-lock.json"
   - "*.config.js"
+
+# Keep files included but disable Liquid processing for certain paths
+defaults:
+  - scope:
+      path: "voice-recorder-app"
+      type: files
+    values:
+      liquid: false
+  - scope:
+      path: "mern-crash-course"
+      type: files
+    values:
+      liquid: false
+  - scope:
+      path: "**/node_modules"
+      type: files
+    values:
+      liquid: false
