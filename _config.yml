@@ -1,7 +1,13 @@
+# _config.yml
 exclude:
-  - node_modules/
-  - mern-crash-course/
+  - "node_modules/"
   - "**/node_modules/"
+  - "voice-recorder-app/"
+  - "mern-crash-course/"
   - "*.json"
   - "*.js"
+  - "*.ts"
   - "package*.json"
+  - "yarn.lock"
+  - "package-lock.json"
+  - "*.config.js"
