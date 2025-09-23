@@ -1,13 +1,4 @@
-# _config.yml
 exclude:
-  - node_modules
-  - "**/node_modules/**"
-  - mern-crash-course/node_modules
-  - vendor
-  - package.json
-  - package-lock.json
-  - yarn.lock
-
-# Optional: stop the README index plugin from hoovering READMEs everywhere
-readme_index:
-  enabled: false
+  - node_modules/
+  - mern-crash-course/node_modules/
+  - "**/node_modules/"
