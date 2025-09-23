@@ -1,3 +1,4 @@
 {
-	"terminal.integrated.cwd": "C:\\Users\\salah\\OneDrive\\Desktop\\OneDrive - McMaster University\\Projects"
+  "terminal.integrated.cwd": "C:\\Users\\salah\\OneDrive\\Desktop\\OneDrive - McMaster University\\Projects",
+  "postman.settings.dotenv-detection-notification-visibility": false
 }
