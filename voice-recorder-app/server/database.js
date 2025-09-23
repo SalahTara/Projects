@@ -1,14 +1,33 @@
-import { Sequelize } from "@sequelize/core";
-import dotenv from "dotenv";
-dotenv.config();
+import { PrismaClient } from "./generated/prisma/index.js";
 
-const sequelize = new Sequelize({
-  host: process.env.MYSQL_HOST,
-  user: process.env.MYSQL_USER,
-  password: process.env.MYSQL_PASSWORD,
-  database: process.env.MYSQL_DB,
-  dialect: process.env.MYSQL_DIALECT,
-  port: 3306,
-});
+const prisma = new PrismaClient();
 
-export default sequelize;
+export default prisma;
+
+// async function main() {
+//   const user = await prisma.user.create({
+//     data: {
+//       name: "Sal",
+//       email: "salahe@gmail.com",
+//       age: 21,
+//       userPreference: {
+//         create: {
+//           emailUpdates: true,
+//         },
+//       },
+//     },
+//     include: {
+//       userPreference: true,
+//     },
+//   });
+//   const user = await prisma.user.deleteMany();
+//   console.log(user);
+// }
+
+// main()
+//   .catch((e) => {
+//     console.error(e.message);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
