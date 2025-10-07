@@ -20,7 +20,7 @@ router.post("/create-account", async (req, res) => {
   res.json(user);
 });
 
-router.post("/sign-in", async (req, res) => {
+router.post("/sign-in", authToken, async (req, res) => {
   const { username, password } = req.body;
   const user = await prisma.user.findUnique({
     where: { username: username },
