@@ -29,15 +29,27 @@ export default function RootLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="workouts"
+        options={{
+          title: "Workouts",
+          tabBarIcon: ({ color, focused }) => (
+            <Ionicons
+              name={focused ? "barbell" : "barbell-outline"}
+              color={color}
+              size={24}
+            />
+          ),
+        }}
+      />
       <Tabs.Screen
         name="settings"
         options={{
           title: "Settings",
           tabBarIcon: ({ color, focused }) => (
             <Ionicons
-              name={
-                focused ? "information-circle" : "information-circle-outline"
-              }
+              name={focused ? "cog" : "cog-outline"}
               color={color}
               size={24}
             />
