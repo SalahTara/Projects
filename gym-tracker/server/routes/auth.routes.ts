@@ -1,13 +1,5 @@
 import express, { type Request, type Response } from "express";
-import {
-  APP_SCHEME,
-  BASE_URL,
-  GOOGLE_AUTH_URL,
-  GOOGLE_CLIENT_ID,
-  GOOGLE_REDIRECT_URI,
-  JWT_EXPIRATION_TIME,
-  JWT_SECRET,
-} from "../constants.ts";
+import { JWT_EXPIRATION_TIME, JWT_SECRET } from "../constants.ts";
 import bcrypt from "bcrypt";
 import prisma from "../database.ts";
 import validator from "validator";
@@ -55,7 +47,7 @@ router.post("/sign-in", async (req: Request, res: Response) => {
   if (!user) {
     return res.status(404).json({ message: "User Not Found" });
   }
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await bcrypt.compare(password, user.password as string);
 
   if (!isMatch) {
     return res.status(401).json({ message: "Incorrect Email or Password" });

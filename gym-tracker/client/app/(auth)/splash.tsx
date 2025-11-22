@@ -20,20 +20,6 @@ export default function Splash() {
     iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
   });
 
-  // useEffect(() => {
-  //   console.log(
-  //     "Current redirect URI:",
-  //     AuthSession.makeRedirectUri({
-  //       scheme: "gymtracker",
-  //       path: "auth",
-  //     })
-  //   );
-  // }, []);
-
-  // useEffect(() => {
-  //   console.log("AUTH REQUEST URL:", request?.url);
-  // }, [request]);
-
   return (
     <View style={styles.container}>
       <ImageSlider />

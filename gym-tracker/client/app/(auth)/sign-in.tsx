@@ -7,20 +7,15 @@ import axios from "axios";
 import { useAuth } from "@/context/authContext";
 
 export default function signIn() {
-  const { signIn } = useAuth();
   // Email or Username
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
-  const URL = `http://${process.env.EXPO_PUBLIC_API_URL}:3000/sign-in`;
+  const URL = `http://${process.env.EXPO_PUBLIC_API_URL}:3000/auth/sign-in`;
 
-  // Google Cloud Services Client ID for each platform
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-    iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
-  });
+  // Google Sign In
+  const { signIn } = useAuth();
 
-  const handleLogin = async () => {
+  const handleEmailLogin = async () => {
     const response = await axios.post(URL, { identifier, password });
     router.push("/(tabs)");
     console.log(response.data);
@@ -36,7 +31,6 @@ export default function signIn() {
           setIdentifier(text);
         }}
       />
-
       <Text style={styles.text}>Password</Text>
       <TextInput
         style={styles.signInInfo}
@@ -55,29 +49,22 @@ export default function signIn() {
         style={({ pressed }) => {
           return [styles.loginBtn, pressed && { backgroundColor: "#D4D4D4" }];
         }}
-        onPress={handleLogin}
+        onPress={handleEmailLogin}
       >
         <Text style={styles.loginBtnText}>Login</Text>
       </Pressable>
-
       <Text style={styles.textCenter}>or</Text>
 
+      {/* Google Sign In */}
       <Pressable
         style={({ pressed }) => {
           return [styles.btn, pressed && { backgroundColor: "#D4D4D4" }];
         }}
+        onPress={signIn}
       >
         <Ionicons style={styles.icon} name="logo-google" size={20} />
-        <Text
-          style={styles.btntext}
-          onPress={() => {
-            promptAsync();
-          }}
-        >
-          Sign in with Google
-        </Text>
+        <Text style={styles.btntext}>Sign in with Google</Text>
       </Pressable>
-
       {/* <Pressable
         style={({ pressed }) => {
           return [styles.btn, pressed && { backgroundColor: "#D4D4D4" }];
@@ -86,7 +73,6 @@ export default function signIn() {
         <Ionicons style={styles.appleIcon} name="logo-apple" size={20} />
         <Text style={styles.btntext}>Sign in with Apple</Text>
       </Pressable> */}
-
       <View style={styles.signUpContainer}>
         <Text style={styles.signUpText}>New Here?</Text>
         <Link style={styles.signUpLink} href={"/(auth)/splash"}>

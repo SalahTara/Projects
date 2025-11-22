@@ -11,15 +11,23 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+
 }
 
 model user {
+  // Shared Between Email Sign up and Google Sign up
   id        Int      @id @default(autoincrement())
-  username  String   @unique
   email     String   @unique
-  password  String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  // Email Specific
+  username String? @unique
+  password String?
+
+  // Google Specific
+  googleId String? @unique // Google "sub"
+  name     String?
 }
 
 model exerciseCategory {

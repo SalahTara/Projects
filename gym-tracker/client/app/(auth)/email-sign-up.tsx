@@ -5,7 +5,6 @@ import axios from "axios";
 import { router } from "expo-router";
 
 export default function EmailSignUp() {
-  const { signIn } = useAuth();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
