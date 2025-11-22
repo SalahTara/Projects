@@ -1,39 +1,43 @@
-import { Link, router, Stack } from "expo-router";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { StyleSheet, Text, TextInput, View, Pressable } from "react-native";
-import * as Google from "expo-auth-session/providers/google";
-import axios from "axios";
 import { useAuth } from "@/context/authContext";
+import axios from "axios";
+import { router } from "expo-router";
 
-export default function signIn() {
+export default function EmailSignUp() {
   const { signIn } = useAuth();
-  // Email or Username
-  const [identifier, setIdentifier] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const URL = `http://${process.env.EXPO_PUBLIC_API_URL}:3000/sign-in`;
+  const URL = `http://${process.env.EXPO_PUBLIC_API_URL}:3000/auth/sign-up`;
 
-  // Google Cloud Services Client ID for each platform
-  const [request, response, promptAsync] = Google.useAuthRequest({
-    clientId: process.env.EXPO_PUBLIC_WEB_CLIENT_ID,
-    androidClientId: process.env.EXPO_PUBLIC_ANDROID_CLIENT_ID,
-    iosClientId: process.env.EXPO_PUBLIC_IOS_CLIENT_ID,
-  });
-
-  const handleLogin = async () => {
-    const response = await axios.post(URL, { identifier, password });
-    router.push("/(tabs)");
-    console.log(response.data);
+  const handleSubmit = async () => {
+    try {
+      const response = await axios.post(URL, { username, email, password });
+      console.log(response.data);
+      router.push("/(auth)/sign-in");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Email or Username</Text>
+      <Text style={styles.text}>Username</Text>
+      <TextInput
+        style={styles.signInInfo}
+        onChangeText={(text) => {
+          setUsername(text);
+        }}
+        placeholder="username"
+      />
+
+      <Text style={styles.text}>Email</Text>
       <TextInput
         style={styles.signInInfo}
         placeholder="example@gmail.com"
         onChangeText={(text) => {
-          setIdentifier(text);
+          setEmail(text);
         }}
       />
 
@@ -46,53 +50,15 @@ export default function signIn() {
           setPassword(text);
         }}
       />
-      <View style={styles.signUpContainer}>
-        <Link style={styles.changePasswordLink} href={"/(auth)/splash"}>
-          Forgot Password?
-        </Link>
-      </View>
+
       <Pressable
         style={({ pressed }) => {
           return [styles.loginBtn, pressed && { backgroundColor: "#D4D4D4" }];
         }}
-        onPress={handleLogin}
+        onPress={handleSubmit}
       >
-        <Text style={styles.loginBtnText}>Login</Text>
+        <Text style={styles.loginBtnText}>Continue</Text>
       </Pressable>
-
-      <Text style={styles.textCenter}>or</Text>
-
-      <Pressable
-        style={({ pressed }) => {
-          return [styles.btn, pressed && { backgroundColor: "#D4D4D4" }];
-        }}
-      >
-        <Ionicons style={styles.icon} name="logo-google" size={20} />
-        <Text
-          style={styles.btntext}
-          onPress={() => {
-            promptAsync();
-          }}
-        >
-          Sign in with Google
-        </Text>
-      </Pressable>
-
-      {/* <Pressable
-        style={({ pressed }) => {
-          return [styles.btn, pressed && { backgroundColor: "#D4D4D4" }];
-        }}
-      >
-        <Ionicons style={styles.appleIcon} name="logo-apple" size={20} />
-        <Text style={styles.btntext}>Sign in with Apple</Text>
-      </Pressable> */}
-
-      <View style={styles.signUpContainer}>
-        <Text style={styles.signUpText}>New Here?</Text>
-        <Link style={styles.signUpLink} href={"/(auth)/splash"}>
-          Sign Up
-        </Link>
-      </View>
     </View>
   );
 }

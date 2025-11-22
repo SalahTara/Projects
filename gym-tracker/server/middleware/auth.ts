@@ -2,17 +2,17 @@ import jwt from "jsonwebtoken";
 import type { Request, Response, NextFunction } from "express";
 
 // types/express/index.d.ts
-declare namespace Express {
-  export interface Request {
-    user?: {
-      id: number;
-      email: string;
-      role?: string;
-      iat?: number;
-      exp?: number;
-    };
-  }
-}
+// declare namespace Express {
+//   export interface Request {
+//     user?: {
+//       id: number;
+//       email: string;
+//       role?: string;
+//       iat?: number;
+//       exp?: number;
+//     };
+//   }
+// }
 
 const authToken = (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers["authorization"];

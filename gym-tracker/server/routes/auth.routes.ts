@@ -1,8 +1,18 @@
 import express, { type Request, type Response } from "express";
+import {
+  APP_SCHEME,
+  BASE_URL,
+  GOOGLE_AUTH_URL,
+  GOOGLE_CLIENT_ID,
+  GOOGLE_REDIRECT_URI,
+  JWT_EXPIRATION_TIME,
+  JWT_SECRET,
+} from "../constants.ts";
 import bcrypt from "bcrypt";
 import prisma from "../database.ts";
 import validator from "validator";
 import jwt from "jsonwebtoken";
+import * as jose from "jose";
 
 const router = express.Router();
 
@@ -35,10 +45,10 @@ router.post("/sign-up", async (req: Request, res: Response) => {
 });
 
 router.post("/sign-in", async (req: Request, res: Response) => {
-  const { email, password, username } = req.body;
+  const { identifier, password } = req.body;
   const user = await prisma.user.findFirst({
     where: {
-      OR: [{ email: email }, { username: username }],
+      OR: [{ email: identifier }, { username: identifier }],
     },
   });
 
@@ -63,6 +73,40 @@ router.post("/sign-in", async (req: Request, res: Response) => {
     user: user,
     token: accessToken,
   });
+});
+
+router.post("/google", async (req: Request, res: Response) => {
+  console.log("REQ BODY RAW:", req.body);
+
+  const { idToken } = req.body;
+
+  if (!idToken) {
+    return res.status(400).json({ message: "Missing idToken" });
+  }
+
+  // 1. Decode Google ID token (you already use jose)
+  const userInfo = jose.decodeJwt(idToken) as any;
+  console.log(userInfo);
+
+  // 2. Strip exp (like you did before)
+  const { exp, ...userInfoWithoutExp } = userInfo;
+
+  // 3. User id (sub) from Google
+  const sub = userInfo.sub as string;
+
+  // 4. Current timestamp in seconds
+  const issuedAt = Math.floor(Date.now() / 1000);
+
+  // 5. Create your own short-lived access token
+  const accessToken = await new jose.SignJWT(userInfoWithoutExp)
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime(JWT_EXPIRATION_TIME)
+    .setSubject(sub)
+    .setIssuedAt(issuedAt)
+    .sign(new TextEncoder().encode(JWT_SECRET));
+
+  // await prisma.user.create()
+  return res.json({ message: "Token Created", accessToken });
 });
 
 export default router;

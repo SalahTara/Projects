@@ -1,17 +1,17 @@
-import { Stack, Slot } from "expo-router";
-import { ClerkProvider } from "@clerk/clerk-expo";
-import { tokenCache } from "@clerk/clerk-expo/token-cache";
+// app/_layout.jsx
+import { Stack } from "expo-router";
+import { useState } from "react";
+import { AuthProvider } from "@/context/authContext";
 
-// Root Layout
 export default function RootLayout() {
+  const [authState, setAuthState] = useState({
+    username: "",
+    status: false,
+  });
+
   return (
-    <ClerkProvider tokenCache={tokenCache}>
-      <Stack>
-        <Stack.Screen
-          name="(tabs)"
-          options={{ headerShown: false }}
-        ></Stack.Screen>
-      </Stack>
-    </ClerkProvider>
+    <AuthProvider>
+      <Stack screenOptions={{ headerShown: false }} />
+    </AuthProvider>
   );
 }

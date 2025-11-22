@@ -17,7 +17,7 @@ type Category = {
 export default function Index() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [clicked, setClicked] = useState(false);
-  const API = `http://${process.env.EXPO_PUBLIC_API_URL}:3000`;
+  const API = `http://${process.env.EXPO_PUBLIC_HOME_API_URL}:3000`;
   console.log(API);
   const fetchCategories = async () => {
     try {
