@@ -1,5 +1,5 @@
 import express, { type Request, type Response } from "express";
-import { JWT_EXPIRATION_TIME, JWT_SECRET } from "../constants.ts";
+import { JWT_SECRET } from "../constants.ts";
 import bcrypt from "bcrypt";
 import prisma from "../database.ts";
 import validator from "validator";
@@ -7,6 +7,52 @@ import jwt from "jsonwebtoken";
 import * as jose from "jose";
 
 const router = express.Router();
+
+router.get("/user", async (req: Request, res: Response) => {
+  const authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return res.status(401).json({ error: "No token provided" });
+  }
+
+  const accessToken = authHeader.split(" ")[1];
+  if (!accessToken) {
+    return res.status(401).json({ error: "Token missing" });
+  }
+
+  const secret = new TextEncoder().encode(JWT_SECRET);
+
+  let payload;
+  try {
+    ({ payload } = await jose.jwtVerify(accessToken, secret));
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
+
+  // FIX HERE: use your own JWT fields (userId)
+  const user = await prisma.user.findUnique({
+    where: { id: payload.userId },
+  });
+
+  if (!user) {
+    return res.status(401).json({ error: "User no longer exists" });
+  }
+
+  const newToken = await new jose.SignJWT({
+    userId: user.id,
+    email: user.email,
+    googleId: user.googleId,
+  })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("7d")
+    .setSubject(user.id.toString()) // optional
+    .sign(secret);
+
+  return res.json({
+    message: "Signed in",
+    accessToken: newToken,
+    user,
+  });
+});
 
 router.post("/sign-up", async (req: Request, res: Response) => {
   const { username, email, password } = req.body;
@@ -53,13 +99,14 @@ router.post("/sign-in", async (req: Request, res: Response) => {
     return res.status(401).json({ message: "Incorrect Email or Password" });
   }
 
-  const accessToken = jwt.sign(
-    { email: user.email, username: user.username },
-    process.env.JWT_SECRET!,
-    // { expiresIn: "1h" }
-    { algorithm: "HS256" }
-  );
-
+  const accessToken = await new jose.SignJWT({
+    userId: user.id,
+    email: user.email,
+  })
+    .setProtectedHeader({ alg: "HS256" })
+    .setExpirationTime("7d") // e.g. "1h"
+    .setSubject(user.id.toString())
+    .sign(new TextEncoder().encode(JWT_SECRET));
   return res.json({
     message: "Sign in Successful",
     user: user,
@@ -76,29 +123,48 @@ router.post("/google", async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Missing idToken" });
   }
 
-  // 1. Decode Google ID token (you already use jose)
-  const userInfo = jose.decodeJwt(idToken) as any;
-  console.log(userInfo);
+  const googleKeys = await jose.createRemoteJWKSet(
+    new URL("https://www.googleapis.com/oauth2/v3/certs")
+  );
 
-  // 2. Strip exp (like you did before)
-  const { exp, ...userInfoWithoutExp } = userInfo;
+  const { payload } = await jose.jwtVerify(idToken, googleKeys, {
+    issuer: "https://accounts.google.com",
+    audience:
+      "1025144183250-9kn4glvtg892ruolo72ap2m3v9gs4gdd.apps.googleusercontent.com",
+  });
 
-  // 3. User id (sub) from Google
-  const sub = userInfo.sub as string;
+  let user = await prisma.user.findUnique({
+    where: { googleId: payload.sub! },
+  });
 
-  // 4. Current timestamp in seconds
-  const issuedAt = Math.floor(Date.now() / 1000);
+  // If not, create user
+  if (!user) {
+    user = await prisma.user.create({
+      data: {
+        googleId: payload.sub,
+        email: payload.email as string,
+        name: `${payload.given_name ?? ""} ${payload.family_name ?? ""}`.trim(),
+        picture: (payload.picture as string) ?? null,
+      },
+    });
+  }
 
-  // 5. Create your own short-lived access token
-  const accessToken = await new jose.SignJWT(userInfoWithoutExp)
+  // Create your own short-lived access token
+  const accessToken = await new jose.SignJWT({
+    userId: user.id,
+    email: user.email,
+    googleId: user.googleId,
+  })
     .setProtectedHeader({ alg: "HS256" })
-    .setExpirationTime(JWT_EXPIRATION_TIME)
-    .setSubject(sub)
-    .setIssuedAt(issuedAt)
+    .setExpirationTime("7d") // e.g. "1h"
+    .setSubject(user.id.toString())
     .sign(new TextEncoder().encode(JWT_SECRET));
 
-  // await prisma.user.create()
-  return res.json({ message: "Token Created", accessToken });
+  return res.json({
+    message: "Token Created",
+    accessToken: accessToken,
+    user: user,
+  });
 });
 
 export default router;
