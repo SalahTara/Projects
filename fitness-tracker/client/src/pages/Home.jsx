@@ -3,7 +3,6 @@ import { AuthContext } from "../../helpers/AuthContext";
 
 function Home() {
   const { userInfo } = useContext(AuthContext);
-  console.log("User Info: ", userInfo);
   return (
     <div>
       <div>{userInfo.name}</div>

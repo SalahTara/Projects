@@ -1,6 +1,6 @@
 import { Box, Button, TextField, ThemeProvider } from "@mui/material";
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import theme from "../../theme";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
@@ -8,18 +8,17 @@ import { AuthContext } from "../../helpers/AuthContext";
 import { useState } from "react";
 
 function Signup() {
+  const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const emailSignUp = async (e) => {
     e.preventDefault();
-    const create_account = await axios.post(
-      "http://localhost:3000/auth/sign-up",
-      {
-        email: email,
-        password: password,
-      }
-    );
-    console.log(create_account);
+    const response = await axios.post("http://localhost:3000/auth/sign-up", {
+      email: email,
+      password: password,
+    });
+    console.log(response);
+    navigate("/login");
   };
   const googleLogin = useGoogleLogin({
     onSuccess: async ({ code }) => {

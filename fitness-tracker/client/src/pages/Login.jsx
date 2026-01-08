@@ -4,7 +4,7 @@ import { Box, Button, TextField, ThemeProvider } from "@mui/material";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../../helpers/AuthContext";
 
@@ -12,42 +12,36 @@ function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const { setUserInfo } = useContext(AuthContext);
+  const { userInfo, setUserInfo } = useContext(AuthContext);
   const emailLogin = async (e) => {
     e.preventDefault();
-
     try {
-      const create_account = await axios.post(
-        "http://localhost:3000/auth/login",
-        {
-          email: email,
-          password: password,
-        }
-      );
+      const response = await axios.post("http://localhost:3000/auth/login", {
+        email: email,
+        password: password,
+      });
+      setUserInfo({
+        name: response.data.user.displayName,
+        picture: response.data.user.avatarUrl,
+        email: response.data.user.email,
+      });
       navigate("/home");
-      setUserInfo;
-      console.log(create_account);
+      console.log("User Info: ", userInfo);
     } catch (err) {
       console.error("Login failed:", err.response?.data || err.message);
     }
-    const create_account = await axios.post(
-      "http://localhost:3000/auth/login",
-      {
-        email: email,
-        password: password,
-      }
-    );
-    setUserInfo({});
-    navigate("/home");
-    console.log(create_account);
   };
   const googleLogin = useGoogleLogin({
     onSuccess: async ({ code }) => {
-      const tokens = await axios.post("http://localhost:3000/auth/google", {
+      const response = await axios.post("http://localhost:3000/auth/google", {
         code,
       });
-
-      console.log(tokens);
+      setUserInfo({
+        name: response.data.user.displayName,
+        picture: response.data.user.avatarUrl,
+        email: response.data.user.email,
+      });
+      navigate("/home");
     },
     flow: "auth-code",
   });
@@ -127,12 +121,16 @@ function Login() {
             <Button
               component="button"
               variant="contained"
-              sx={{ marginY: 2, width: 400, textTransform: "none", mb: 15 }}
+              sx={{ marginY: 2, width: 400, textTransform: "none", mb: 2 }}
               type="submit"
             >
               Log in
             </Button>
           </form>
+          <Box sx={{ display: "flex", fontSize: 14 }}>
+            <Box sx={{ mr: 0.5, mb: 15 }}>Forgot Password?</Box>
+            <Link to="/reset-password">Reset Password</Link>
+          </Box>
         </Box>
 
         <Box

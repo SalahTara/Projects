@@ -14,31 +14,15 @@ datasource db {
 }
 
 model User {
-  id          String         @id @default(uuid())
-  displayName String?
-  avatarUrl   String?
-  providers   AuthProvider[]
+  id String @id @default(uuid())
+
+  email       String @unique
+  displayName String
+  avatarUrl   String
+
+  googleSub    String? // Google only
+  passwordHash String? // Local only
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-}
-
-model AuthProvider {
-  id     String @id @default(uuid())
-  userId String
-
-  provider       AuthType
-  providerUserId String   @unique // email (local) OR google sub
-
-  passwordHash String? // ONLY for local
-  email        String? // ONLY for local
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  @@unique([provider, providerUserId])
-}
-
-enum AuthType {
-  local
-  google
 }

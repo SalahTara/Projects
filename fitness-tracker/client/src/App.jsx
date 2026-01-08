@@ -2,6 +2,7 @@ import Signup from "./pages/Signup.jsx";
 import Splash from "./pages/Splash.jsx";
 import Login from "./pages/Login.jsx";
 import Home from "./pages/Home.jsx";
+import ResetPassword from "./pages/ResetPassword.jsx";
 import { CssBaseline, Box, ThemeProvider, Button } from "@mui/material";
 import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import theme from "../theme.js";
@@ -13,7 +14,6 @@ function App() {
     name: "",
     picture: "",
     email: "",
-    sub: "",
   });
   return (
     <AuthContext.Provider value={{ userInfo, setUserInfo }}>
@@ -76,6 +76,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/home" element={<Home />} />
+            <Route path="reset-password" element={<ResetPassword />} />
           </Routes>
         </Router>
       </ThemeProvider>
